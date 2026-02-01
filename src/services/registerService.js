@@ -6,20 +6,26 @@ async function registerUser({email, password, name}) {
         const existingUser = await prisma.user.findUnique({where: {email}});
 
         if(existingUser){
-            return console.log("O usuário já está cadastrado")
+            console.log("O usuário já está cadastrado");
+            return null
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        const user = await prisma.user.create({data: 
-            {email,
+        const user = await prisma.user.create({data: {
+            email,
             password: hashedPassword,
-            name}
+            name
+            }
         })
         
-        return user;
-    }catch {
-        console.log("Erro ao cadastrar o usuário");
+        return {
+            email: user.email,
+            name: user.name
+        };
+    }catch (error){
+        console.log("Erro ao cadastrar o usuário " + error);
+        return null
     }
 }
 
