@@ -6,7 +6,7 @@ async function validadeUser({email, password}) {
         const user = await prisma.user.findUnique({where: {email}});
         
         if(!user || !await bcrypt.compare(password, user.password)){
-            console.log("E-mail ou senha inválidos")
+            console.log("E-mail ou senha inválidos");
             return null;
         }
         

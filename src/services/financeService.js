@@ -1,6 +1,6 @@
 const prisma = require("../utils/adapter");
 
-async function getMontlySummary(userId) {
+async function getMontlySummary(userId, month, year) {
     const startDate = new Date(2026, 2 - 1, 1);
     const endDate = new Date(2026, 2, 0, 23, 59, 59);
 

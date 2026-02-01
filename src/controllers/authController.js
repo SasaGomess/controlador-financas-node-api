@@ -35,12 +35,12 @@ async function register(req, res) {
     const user = await registerUser({ email, name, password });
 
     if (!user) {
-      return res.status(400).json({ error: "Erro ao cadastrar usuário credenciais inválidas" });
+        return res.status(400).json({ error: "Erro ao cadastrar usuário." });
     }
 
     return res.status(201).json(user);
   } catch {
-    return res.status(500).json({error: "Erro ao cadastrar usuário"})
+    return res.status(500).json({error: "Erro ao cadastrar usuário"});
   }
 
 }

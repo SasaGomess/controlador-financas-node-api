@@ -7,7 +7,7 @@ async function registerUser({email, password, name}) {
 
         if(existingUser){
             console.log("O usuário já está cadastrado");
-            return null
+            return null;
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,7 +25,7 @@ async function registerUser({email, password, name}) {
         };
     }catch (error){
         console.log("Erro ao cadastrar o usuário " + error);
-        return null
+        return null;
     }
 }
 
