@@ -1,7 +1,7 @@
 const prisma = require("../utils/adapter");
 const bcrypt = require("bcrypt");
 
-async function validade({email, password}) {
+async function validadeUser({email, password}) {
     try{
         const user = await prisma.user.findUnique({where: {email}});
         
@@ -10,11 +10,14 @@ async function validade({email, password}) {
             return null;
         }
         
-        return user;    
+        return {
+            id: user.id,
+            email: user.email
+        };    
     }catch (error){
         console.log("Erro ao verificar o usuário " + error);
         return null;
     }
 }
 
-module.exports = validade;
+module.exports = validadeUser;
