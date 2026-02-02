@@ -16,11 +16,11 @@ async function login(req, res) {
       return res.status(401).json({ error: "Usuário ou senha inválidos" });
     }
 
-    const token = generateToken({ id: user.id });
+    const token = generateToken(user);
 
-    return res.json({ token });
+    return res.json({token});
   } catch {
-    res.status(500).json({ error: "Erro ao realizar login" });
+    res.status(500).json({ error: "Erro ao realizar login"});
   }
 }
 

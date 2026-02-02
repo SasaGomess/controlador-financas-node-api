@@ -9,7 +9,7 @@ const server = express();
 server.use(express.json());
 
 server.use("/auth", authRoutes);
-server.use("/trasactions", transactionRoutes);
+server.use("/transactions", transactionRoutes);
 server.use("/finances", financesRoutes)
 
 server.use("/", (req, res) => {

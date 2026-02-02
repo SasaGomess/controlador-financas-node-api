@@ -1,38 +1,42 @@
 const prisma = require("../utils/adapter");
 
-async function create(data){
+async function create(data, userId){
    try{
-       const transactionCreated = await prisma.transaction.create({data: {
+       const transactionCreated = await prisma.transaction.create({
        data: {
            description: data.description,
            type: data.type,
            date: data.date, 
-           amount: data.amount,
+           amount: parseFloat(data.amount),
            userId: userId
         }
-    }})
-       return transactionCreated;
+    })
+
+    return transactionCreated;
+
     } catch (error) {
         console.log("Erro ao criar uma transação: " + error)
+        return null;
     }
 }
 
-async function find(id){
+async function find(id, userId){
     try{
-        const transaction = await prisma.transaction.findUnique({where: {id}});
+        const transaction = await prisma.transaction.findUnique({where: {id, userId}});
         
         if(!transaction){
             return null
         }
+
         return transaction;
     }catch (error){
       console.log("Erro ao encontrar uma transação" + error);
     }
 }
 
-async function findAll(){
+async function findAll(userId){
     try{
-       const transactions = await prisma.transaction.findMany();
+       const transactions = await prisma.transaction.findMany({where: {userId}});
 
        return transactions;
     } catch (error) {
@@ -51,16 +55,14 @@ async function deleteTransaction(transaction){
 async function update(id, transaction){
     try{
     
-       const transactionUpdated = prisma.transaction.upadate({where: {id},
+       const transactionUpdated = prisma.transaction.update({where: {id},
           data: {
-            amount: transaction.amount,
+            amount: parseFloat(transaction.amount),
             date: transaction.date,
             type: transaction.type,
-            description: transaction.description,
-            userId: transaction.userId
+            description: transaction.description
         }
 
-        
     });
      return transactionUpdated;
     } catch (error) {

@@ -1,6 +1,6 @@
 const prisma = require("../utils/adapter");
 
-async function getMontlySummary(userId, month, year) {
+async function getMonthlySummary(userId, month, year) {
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0, 23, 59, 59);
 
@@ -33,4 +33,4 @@ async function getMontlySummary(userId, month, year) {
     }
 }
 
-module.exports = { getMontlySummary };
+module.exports = { getMonthlySummary };

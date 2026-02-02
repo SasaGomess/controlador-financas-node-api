@@ -1,9 +1,9 @@
-const transactionService = require("../scr/services/transactionService");
-
+const transactionService = require("../services/transactionService");
 
 async function findTransactions(req,  res){
     try{
-        const transactions = await transactionService.findAll();
+        const userId = parseInt(req.userId);
+        const transactions = await transactionService.findAll(userId);
         res.status(200).json(transactions);
     } catch {
         res.status(500).json({error: "Erro ao encontrar as transações"})
@@ -13,8 +13,17 @@ async function findTransactions(req,  res){
 async function createTransaction(req, res){
     try{  
        const data = req.body;
+       const userId = parseInt(req.userId);
 
-       const transactionCreated = await transactionService.create(data);
+       if(!data.amount || !data.description || !data.type || !data.date){
+            res.status(400).json({error: "Descrição, tipo, data e valor são obrigatórios"});
+        }
+
+       const transactionCreated = await transactionService.create(data, userId);
+
+       if(!transactionCreated){
+        res.status(500).json({error: "Erro ao criar uma transação"})
+       }
 
        res.status(201).json(transactionCreated);
     } catch {
@@ -24,21 +33,26 @@ async function createTransaction(req, res){
 
 async function updateTransaction(req, res){
     try{  
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.userId);
         const data = req.body;
 
-        const transaction = await transactionService.find(id);
+        if(!data.amount || !data.description || !data.type || !data.date){
+            res.status(400).json({error: "Descrição, tipo, data e valor são obrigatórios"});
+        }
         
-        if(!transactionService){
+        const transaction = await transactionService.find(id, userId);
+        
+        if(!transaction){
             res.status(404).json({error: "Transação não encontrada"});
         }
-
         
-        const transactionUpdated = transactionService.update(transaction.id, data);
+        const transactionUpdated = await transactionService.update(transaction.id, data);
 
         if(!transactionUpdated){
-            res.status(404).json({error: "Transação não encontrada!"})
+            res.status(500).json({error: "Erro ao atualizar uma transação"})
         }
+
 
         res.status(200).json(transactionUpdated);
     } catch {
@@ -48,9 +62,10 @@ async function updateTransaction(req, res){
 
 async function findATransaction(req, res){
     try{
-        const id = req.params.id;
-
-        const transaction = transactionService.find(id);
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.userId);
+        
+        const transaction = await transactionService.find(id, userId);
 
         if(!transaction){
             res.status(404).json({error: "Transação não encontrada"});
@@ -64,18 +79,18 @@ async function findATransaction(req, res){
 
 async function deleteTransaction(req, res){
     try {
-        const id = req.params.id;
-
-        const transaction = await transactionService.find(id);
+        const id = parseInt(req.params.id);
+        const userId = parseInt(req.userId);
+        
+        const transaction = await transactionService.find(id, userId);
 
         if(!transaction){
             res.status(404).json({error: "Transação não encontrada"});
         }
 
-        transactionService.deleteTransaction(transaction);
+        await transactionService.deleteTransaction(transaction);
 
         res.status(204).send();
-
     } catch {
         res.status(500).json({error: "Erro ao deletar uma transação"})
     }
