@@ -4,7 +4,6 @@ async function getMonthlySummary(userId, month, year) {
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0, 23, 59, 59);
 
-
     const incomes = await prisma.transaction.findMany({
         where: { userId,
             date: {gte: startDate, lte: endDate},
@@ -19,14 +18,14 @@ async function getMonthlySummary(userId, month, year) {
         }
     });
 
-    const totalMontlyIncome = incomes.reduce((acc, i ) => acc + i.amount, 0);
-    const totalMontlyExpense = expenses.reduce((acc, e) => acc + e.amount, 0);
+    const totalMonthlyIncome = incomes.reduce((acc, i ) => acc + i.amount, 0);
+    const totalMonthlyExpense = expenses.reduce((acc, e) => acc + e.amount, 0);
 
-    const balance = totalMontlyIncome - totalMontlyExpense;
+    const balance = totalMonthlyIncome - totalMonthlyExpense;
 
     return {
-        totalMontlyIncome,
-        totalMontlyExpense,
+        totalMonthlyIncome,
+        totalMonthlyExpense,
         balance,
         incomes,
         expenses
