@@ -11,17 +11,17 @@
 
 O **Controlador de Finanças** nasceu de uma necessidade pessoal de ajudar meus familiares a organizarem suas finanças com tranquilidade. Percebi que muitas pessoas do meu cotidiano (principalmente mais velhas), tinham dificuldades em usar planilhas do Excel ou simplesmente não se sentiam confortáveis com ferramentas complexas para controlar seu dinheiro. 
 
-E foi com o intuito de reforçar a **educação e controle financeiro** na vida dessas pessoas que criei o Controlador de Finanças, um sistema que vai servir de back-end para o front-end do projeto. Aplico a ideia de criar algo objetivo e intuitivo, que descomplica a organização financeira e pode ser inserido na rotina do usuário.
+E foi com o intuito de reforçar a **educação e o controle financeiro** na vida dessas pessoas, que criei o Controlador de Finanças, um sistema que vai servir de **back-end** para o front-end do projeto. Aplico a ideia de criar algo objetivo e intuitivo, que descomplica a organização financeira e pode ser inserido na rotina do usuário.
 
-Ele é uma API REST desenvolvida em Node.js que permite aos usuários gerenciar suas finanças pessoais de forma simples e segura. O projeto foi construído seguindo as melhores práticas de desenvolvimento, incluindo:
+Ele é uma **API REST** desenvolvida em **Node.js** que permite aos usuários gerenciar suas finanças pessoais de forma simples e segura. O projeto foi construído seguindo as melhores práticas de desenvolvimento, incluindo:
 
 - ✅ Arquitetura em camadas (Routes → Controllers → Services → Models)
 - ✅ Autenticação segura com JWT (JSON Web Tokens)
 - ✅ Criptografia de senhas com Bcrypt
 - ✅ Validação de dados em todas as requisições
-- ✅ Separação clara de responsabilidades
+- ✅ Utilização de Middleware para validação de Token e proteção de rotas
 
-O sistema permite que os usuários registrem suas transações financeiras, categorizem receitas e despesas, e obtenham resumos mensais detalhados de sua situação financeira.
+O sistema permite que os **usuários registrem suas transações financeiras, categorizem receitas e despesas, e obtenham resumos mensais detalhados de sua situação financeira.**
 
 ## 
 
@@ -29,15 +29,16 @@ O sistema permite que os usuários registrem suas transações financeiras, cate
 
 ### 🔐 Autenticação
 - **Registro de Usuários**: Criação de conta com e-mail, nome e senha criptografada
-- **Login Seguro**: Autenticação com geração de token JWT
+- **Login Seguro**: Processo de autenticação com geração de token JWT
 - **Proteção de Rotas**: Middleware de autenticação para rotas privadas
+- **Usuário com Acesso Apenas as suas Finanças**: Utilização do ``userId`` para garantir que um usuário tem apenas acesso as suas informações financeiras
 
 ### 💸 Gestão de Transações
-- **Listar Transações**: Visualize todas as suas transações financeiras
-- **Buscar Transação**: Consulte uma transação específica por ID
-- **Criar Transação**: Registre novas receitas ou despesas
-- **Atualizar Transação**: Edite informações de transações existentes
-- **Deletar Transação**: Remova transações do seu histórico
+- **Listar Transações**: Visualiza todas as transações financeiras de um usuário
+- **Buscar Transação**: Consulta uma transação específica por ID
+- **Criar Transação**: Registra novas receitas ou despesas
+- **Atualizar Transação**: Edita informações de transações existentes
+- **Deletar Transação**: Remove transações do histórico
 
 ### 📊 Relatórios Financeiros
 - **Resumo Mensal**:
@@ -59,7 +60,7 @@ POST /auth/register
 POST /auth/login
 ```
 
-**Body Cadastro:**
+**Body do Cadastro:**
 ```json
 {
   "name": "João Silva",
@@ -67,14 +68,14 @@ POST /auth/login
   "password": "senha123"
 }
 ```
-**Body Login:**
+**Body do Login:**
 ```json
 {
   "email": "joao@example.com",
   "password": "senha123"
 }
 ```
-**Response Login:**
+**Response do Login:**
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -100,7 +101,7 @@ PUT /transactions/:id
 DELETE /transactions/:id
 ```
 
-**Body Cria Transação:**
+**Body do Cria uma Transação:**
 ```json
 {
   "description": "Salário",
@@ -111,11 +112,12 @@ DELETE /transactions/:id
 ```
 ## 
 
-**Body Atualiza Transação:**
+**Body do Atualiza uma Transação:**
 ```json
 {
   "description": "Salário Atualizado",
   "amount": 5500.00
+  "date": "2025-02-05T00:00:00.000Z"
 }
 ```
 ## 
@@ -128,6 +130,7 @@ GET /finances/summary?month=2&year=2025
 Retorna o resumo financeiro do mês especificado.
 
 **Query Params:**
+Em sua ferramenta de teste de Endpoints insira query params para filtrar informações e gerar o relatório
 - `month`: Mês (1-12)
 - `year`: Ano (ex: 2025)
 
@@ -242,6 +245,8 @@ Crie um arquivo `.env` na raiz do projeto:
 POSTGRES_USER=usuario
 POSTGRES_PASSWORD=senha
 POSTGRES_DB=financas_db
+DB_PORT=5433
+
 DATABASE_URL="postgresql://usuario:senha@localhost:5433/financas_db?schema=public"
 
 PORT=3000
@@ -266,9 +271,9 @@ npx prisma migrate dev
 ```bash
 npm run start:dev
 ```
-O servidor estará rodando em `http://localhost:3000`
+O servidor estará rodando em `http://localhost:3000 :)`
 ---
 
 ## 🧪 Testando a API
 
-Você pode testar os endpoints usando o [Postman](https://www.postman.com/)
+Você pode testar os endpoints usando o [Postman](https://www.postman.com/) por exemplo.
