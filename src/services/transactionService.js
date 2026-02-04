@@ -7,6 +7,8 @@ async function create(data, userId){
            description: data.description,
            type: data.type,
            date: data.date, 
+           expenseCategory: data.expenseCategory,
+           incomeCategory: data.incomeCategory,
            amount: parseFloat(data.amount),
            userId: userId
         }
@@ -59,7 +61,6 @@ async function update(id, transaction){
           data: {
             amount: parseFloat(transaction.amount),
             date: transaction.date,
-            type: transaction.type,
             description: transaction.description
         }
 

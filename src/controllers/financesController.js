@@ -17,4 +17,22 @@ async function getMonthlySummary(req, res) {
   }
 };
 
-module.exports = { getMonthlySummary }
+async function getDashboard(req, res) {
+  try {
+    const userId = parseInt(req.userId);
+
+    const dashBoard = await financesService.getDetailedDashBoard(userId);
+
+    if(!dashBoard){
+      return res.status(404).json({error: "Dashboard não encontrado"});
+    }
+
+    return res.status(200).json(dashBoard);
+  }catch {
+    return res.status(500).json({error: "Erro ao achar um dashBoard"});
+  }
+  
+}
+
+
+module.exports = { getMonthlySummary, getDashboard }

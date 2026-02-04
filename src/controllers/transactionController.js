@@ -14,7 +14,7 @@ async function createTransaction(req, res){
     try{  
        const data = req.body;
        const userId = parseInt(req.userId);
-
+       
        if(!data.amount || !data.description || !data.type || !data.date){
             res.status(400).json({error: "Descrição, tipo, data e valor são obrigatórios"});
         }

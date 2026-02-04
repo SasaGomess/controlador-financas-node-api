@@ -3,6 +3,11 @@ const express = require("express");
 const router = express.Router();
 const authMiddleware = require("../middlewares/authMiddleware");
 
-router.get("/summary", authMiddleware, financesController.getMonthlySummary);
+router.use(authMiddleware);
+
+router.get("/summary", financesController.getMonthlySummary);
+
+router.get("/dashboard", financesController.getDashboard);
+
 
 module.exports = router;
