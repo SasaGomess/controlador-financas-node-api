@@ -1,7 +1,13 @@
 const prisma = require("../utils/adapter");
+const redis = require("../lib/cache")
 
 async function create(data, userId) {
   try {
+    redis.del(
+      `${process.env.CACHE_SUMMARY}:${userId}:${year}-${month}`, 
+      `${process.env.CACHE_DASHBOARD}:${userId}`
+    );
+
     const transactionCreated = await prisma.transaction.create({
       data: {
         description: data.description,

@@ -1,8 +1,17 @@
 const prisma = require("../utils/adapter");
+const redis = require("../lib/cache");
 
 async function getMonthlySummary(userId, month, year) {
   const startDate = new Date(year, month - 1, 1);
   const endDate = new Date(year, month, 0, 23, 59, 59);
+
+  const cacheKey = `${process.env.CACHE_SUMMARY}:${userId}:${year}-${month}`;
+
+  const cachedSummary = await redis.get(cacheKey);
+
+  if(cachedSummary){
+    return JSON.parse(cachedSummary);
+  }
 
   const incomes = await prisma.transaction.findMany({
     where: { userId, date: { gte: startDate, lte: endDate }, type: "INCOME" },
@@ -18,17 +27,29 @@ async function getMonthlySummary(userId, month, year) {
     balance,
   } = getTotal(incomes, expenses);
 
-  return {
+  const data = {
     totalMonthlyIncome,
     totalMonthlyExpense,
     balance,
     incomes,
     expenses,
   };
+
+  await redis.set(cacheKey, JSON.stringify(data));
+
+  return data;
 }
 
 async function getDetailedDashBoard(userId) {
   try {
+    const cacheKey = `${process.env.CACHE_DASHBOARD}:${userId}`;
+
+    const cachedDashboard = await redis.get(cacheKey); 
+
+    if(cachedDashboard) {
+      return JSON.parse(cachedDashboard);
+    }
+
     incomes = await prisma.transaction.findMany({
       where: { userId, type: "INCOME" },
     });
@@ -47,22 +68,26 @@ async function getDetailedDashBoard(userId) {
 
     const biggestExpensePerCategory = await prisma.transaction.findFirst({
       where: { userId, type: "EXPENSE" },
-      orderBy: { amount: "desc" },
       select: {
         expenseCategory: true,
       },
+      orderBy: { amount: "desc" },
     });
 
     const expensesVsIncomesPercent = parseInt(
       (totalExpense / totalIncome) * 100,
     );
 
-    return {
+    const data = {
       balance,
       expensesByCategory,
       expensesVsIncomesPercent,
       biggestExpensePerCategory,
     };
+
+    await redis.set(cacheKey, JSON.stringify(data));
+
+    return data;
   } catch (e) {
     console.log(e);
   }
