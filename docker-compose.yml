@@ -1,7 +1,26 @@
 version: '3.8'
 
 services:
-  db:
+  api:
+  # . representa o Dockerfile
+    build: .
+    command: "npm run start:dev"
+    ports:
+      - ${LOCAL_PORT}:${LOCAL_PORT}
+    depends_on:
+      - redis
+      - postgres
+    environment:
+    #variaveis de ambiente no container api
+      NODE_ENV: development
+      DB_HOST: ${DB_HOST}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - .:/financas/api
+  # define o serviço postgres
+  postgres:
     image: postgres:17
     container_name: postgresql-financas
     restart: always
@@ -13,6 +32,11 @@ services:
       - ${DB_PORT}:5432
     volumes:
       - postgres_data:/var/lib/postgresql/data
+  # define o serviço redis
+  redis:
+    image: bitnami/redis:latest
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
 
 volumes:
   postgres_data:

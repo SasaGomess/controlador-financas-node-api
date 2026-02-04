@@ -16,6 +16,6 @@ server.use("/", (req, res) => {
     res.send("Conexão estabelecida com sucesso!");
 })
 
-server.listen(process.env.PORT || 3000, () => {
-    console.log(`Servidor escutando na porta ${process.env.PORT}`)
+server.listen(process.env.LOCAL_PORT || 3000, () => {
+    console.log(`Servidor escutando na porta ${process.env.LOCAL_PORT}`)
 })
