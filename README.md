@@ -21,7 +21,8 @@ Ele é uma **API REST** desenvolvida em **Node.js** que permite aos usuários ge
 - ✅ Criptografia de senhas com Bcrypt
 - ✅ Validação de dados em todas as requisições
 - ✅ Utilização de Middleware para validação de Token e proteção de rotas
-- ✅ Armazenamento em Cache de resumos financeiros com Redis 
+- ✅ Armazenamento em Cache de resumos financeiros com Redis
+- ✅ API, Redis e PostgreSQL containerizados com Docker
 
 O sistema permite que os **usuários registrem suas transações financeiras, categorizem receitas e despesas, e obtenham resumos mensais detalhados de sua situação financeira.**
 
@@ -48,7 +49,13 @@ O sistema permite que os **usuários registrem suas transações financeiras, ca
   - Total de despesas do mês
   - Saldo final do mês
   - Lista detalhada de receitas e despesas
-
+    
+- **Dashboard detalhado**
+  - Gastos por categoria
+  - Saldo total
+  - Percentual de gastos de acordo com a receita
+  - Qual categoria há mais gastos
+  
 ## 
 
 ## 🔌 Endpoints da API
@@ -147,6 +154,11 @@ Em sua ferramenta de teste de Endpoints insira query params para filtrar informa
 }
 ```
 
+```http
+GET /finances/dashboard
+```
+Retorna dashboard detalhado ao usuário sobre seus gastos.
+ 
 ## 
 
 | 🛠️ Tecnologias Utilizadas |
@@ -206,6 +218,7 @@ controlador-financas/
 │
 ├── .env
 ├── .gitignore
+├── Dockerfile
 ├── docker-compose.yml
 ├── package.json
 ├── package-lock.json
@@ -251,7 +264,15 @@ DB_PORT=5433
 
 DATABASE_URL="postgresql://usuario:senha@localhost:5433/financas_db?schema=public"
 
-PORT=3000
+LOCAL_PORT=3000
+
+ # O nome do host é o mesmo que o nome do serviço redis
+REDIS_HOST=redis
+REDIS_PORT=suaportaredis
+REDIS_PASSWORD=suasenharedis
+
+CACHE_SUMMARY=seuprefixodacachekey
+CACHE_DASHBOARD=seuprefixodacachekey
 
 JWT_SECRET_KEY="sua-chave-secreta-super-segura-aqui"
 ```
@@ -278,4 +299,6 @@ O servidor estará rodando em `http://localhost:3000 :)`
 
 ## 🧪 Testando a API
 
-Você pode testar os endpoints usando o [Postman](https://www.postman.com/) por exemplo.
+Você pode testar os endpoints usando as seguintes ferramentas:
+- [Postman](https://www.postman.com/)
+- [Insomnia](https://insomnia.rest/)
