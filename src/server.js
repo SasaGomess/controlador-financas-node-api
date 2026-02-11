@@ -17,5 +17,5 @@ server.use("/", (req, res) => {
 })
 
 server.listen(process.env.PORT || 3000, () => {
-    console.log(`Servidor escutando na porta ${process.env.LOCAL_PORT}`)
+    console.log(`Servidor escutando na porta ${process.env.PORT ? process.env.PORT : 3000} `)
 })
