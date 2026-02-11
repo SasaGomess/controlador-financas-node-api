@@ -7,6 +7,7 @@
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-f00?style=for-the-badge&logo=redis&logoColor=white)
+![Render](https://img.shields.io/badge/Render-7F00FF?style=for-the-badge&logo=reder&logoColor=black)
 
 ## 
 
@@ -23,6 +24,7 @@ Ele é uma **API REST** desenvolvida em **Node.js** que permite aos usuários ge
 - ✅ Utilização de Middleware para validação de Token e proteção de rotas
 - ✅ Armazenamento em Cache de resumos financeiros com Redis
 - ✅ API, Redis e PostgreSQL containerizados com Docker
+- ✅ Deploy da aplicação com Render
 
 O sistema permite que os **usuários registrem suas transações financeiras, categorizem receitas e despesas, e obtenham resumos mensais detalhados de sua situação financeira.**
 
